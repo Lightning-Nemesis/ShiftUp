@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "supermemory-docs": {
+      "type": "http",
+      "url": "https://supermemory.ai/docs/mcp"
+    }
+  }
+}
