@@ -11,6 +11,8 @@
 
 https://github.com/user-attachments/assets/8ca7dcd5-9518-4bda-8cae-a54cbec02daf
 
+<p align="center"><sub>If the video does not play here, open <a href="docs/screenshots/ShiftUp.mp4">docs/screenshots/ShiftUp.mp4</a>.</sub></p>
+
 <p align="center">
   <img src="docs/screenshots/interview.png" alt="The interviewer asks a question aloud. A note above it says: Welcome back, Jaciel. Last time, questions about disagreements at work were hard for you." width="900">
 </p>
