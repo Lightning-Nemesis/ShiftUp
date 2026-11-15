@@ -4,6 +4,16 @@
 
 Interview practice in your language. A sunhacks 2026 project. Practice the interview you'll face for an hourly job, get coached in your own language on what you say and how you say it, and work with an AI that remembers what you struggled with last time.
 
+
+
+https://github.com/user-attachments/assets/8ca7dcd5-9518-4bda-8cae-a54cbec02daf
+
+
+
+
+
+
+
 - [`TEAM_BRIEF.md`](TEAM_BRIEF.md): the idea, who it is for, the demo flow and the task split.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md): services, API contract, lip sync, the Spanish coach, and the build plan.
 
