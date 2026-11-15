@@ -17,6 +17,6 @@ export async function POST(req: Request) {
     resume: body.resume?.slice(0, 6000),
     profile,
   })
-  const response: SessionStartResponse = { sessionId: session.id, profile, question: nextQuestion(session) }
+  const response: SessionStartResponse = { sessionId: session.id, profile, question: await nextQuestion(session) }
   return Response.json(response)
 }

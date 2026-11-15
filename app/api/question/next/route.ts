@@ -6,6 +6,6 @@ export async function POST(req: Request) {
   const session = body?.sessionId ? getSession(body.sessionId) : undefined
   if (!session) return Response.json({ error: "unknown sessionId" }, { status: 404 })
 
-  const response: NextQuestionResponse = { question: nextQuestion(session) }
+  const response: NextQuestionResponse = { question: await nextQuestion(session) }
   return Response.json(response)
 }

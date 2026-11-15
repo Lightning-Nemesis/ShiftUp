@@ -1,6 +1,6 @@
 import { writeFeedback } from "@/lib/llm"
 import { configured } from "@/lib/config"
-import { analyseDelivery, deliveryFlags } from "@/lib/delivery"
+import { analyseDelivery, deliveryFlags, THRESHOLDS } from "@/lib/delivery"
 import { FAKE_FEEDBACK, FAKE_TRANSCRIPT, FAKE_WORDS } from "@/lib/fake"
 import { listen, type Impression } from "@/lib/gemini"
 import { rememberTurn } from "@/lib/memory"
@@ -66,6 +66,11 @@ export async function POST(req: Request) {
     const repeat: RepeatResponse = { repeat: true, transcript }
     return Response.json(repeat)
   }
+  // Kept so the interviewer can follow up on what she said. An answer the speech software was
+  // unsure of in more than a third of its words is left out: the interviewer would be quoting
+  // back words she may never have said.
+  const unsure = words.filter((w) => w.confidence < THRESHOLDS.unclearConfidence).length
+  if (!fake && unsure * 3 <= words.length) (session.answers ??= {})[question.id] = transcript
 
   // Delivery is only assessed on spoken answers given in English.
   const delivery = words.length > 0 && language === "en-US" ? analyseDelivery(words) : undefined

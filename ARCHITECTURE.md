@@ -363,10 +363,10 @@ The same model picks the next question (see below). Use low effort for both call
 
 - **Bank:** `data/questions.hha.json`, 8–10 hand-written questions for home health aide, in English and Spanish, reviewed by our Spanish speaker.
 - **What they want to hear:** each bank question also carries `askingEn` and `askingEs`, one hand-written line on what the interviewer is really asking. A "What are they asking?" link under the question opens it. It is fixed text, so it needs no model call and cannot fail in a demo.
-- **From a posting:** when she pastes a job posting, Claude writes one or two questions from what it asks for.
-- **Follow-ups:** Claude may ask one follow-up built on her last answer.
+- **From a posting or resume:** when she gives a job posting or a resume, the interviewer (`writeQuestion` in `lib/llm.ts`) words the planned bank question around one requirement or fact from it, such as "This job asks for experience with dementia care. Tell me about a time…". The question keeps the bank question's id and type. Without a posting or resume the bank question is asked as written, with no model call.
+- **Follow-ups:** after each answer the interviewer decides whether to follow up or move on. It follows up when the answer did not address the question, did not say what she did, or did not say how it ended, and it repeats a few of her words ("You said you made a schedule with her. What happened after that?"). Code enforces the limits: never two follow-ups in a row, and none on an answer where the speech software was unsure of more than a third of the words, because the interviewer would be quoting words she may not have said. A follow-up keeps the type of the question it follows and is labelled "Follow-up" on screen. Generated questions come with their own Spanish version and "what they want to hear" line, written by the model and not reviewed by our Spanish speaker.
 - **Fixed types**, used by every question whatever its source: `conflict`, `reliability`, `client_care`, `safety_physical`, `why_this_job`, `availability`. Weak-spot memory and the progress view depend on these.
-- **Picking order:** a question of a type listed in her weak spots first, then a posting question, then the rest of the bank.
+- **Picking order:** the bank supplies the plan: a question of a type listed in her weak spots first, then the rest in order. The interviewer may put one follow-up between two planned questions. If the model fails or takes more than 8 seconds, the planned bank question is asked as written (`nextQuestion` in `lib/session.ts`).
 
 ## Memory: Supermemory v5
 

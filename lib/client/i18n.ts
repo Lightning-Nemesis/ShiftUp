@@ -76,6 +76,7 @@ const STRINGS = {
   interviewer: { en: "Ms. Rivera · Interviewer", es: "Sra. Rivera · Entrevistadora" },
   speaking: { en: "Speaking", es: "Hablando" },
   questionN: { en: "Question {n}", es: "Pregunta {n}" },
+  followUp: { en: "Follow-up", es: "Pregunta de seguimiento" },
   coach: { en: "Coach · Español", es: "Coach · español" },
   example: { en: "Example answer", es: "Respuesta de ejemplo" },
   captions: { en: "Captions", es: "Subtítulos" },

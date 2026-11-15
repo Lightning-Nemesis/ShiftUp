@@ -334,7 +334,10 @@ export default function Interview() {
   // The question, with the word being spoken marked. Shown under the face on a phone and beside it on a laptop.
   const questionBlock = question && (
     <>
-      <span className="eyebrow">{t("questionN", { n: questionNumber })}</span>
+      <span className="eyebrow">
+        {t("questionN", { n: questionNumber })}
+        {question.source === "followup" && ` · ${t("followUp")}`}
+      </span>
       {captionLang === "en" ? (
         <p className="caption" lang="en">
           {speakingQuestion ? (

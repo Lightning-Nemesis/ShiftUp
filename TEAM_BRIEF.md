@@ -88,6 +88,8 @@ Each answer gets two kinds of feedback, both in her language with English alongs
 
 ## Three-minute demo script
 
+The full run-through, with the setup steps, Jaciel's exact lines and what to do if something breaks, is in [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md). The outline below is the earlier plan.
+
 | Time | What happens |
 |---|---|
 | 0:00–0:20 | The problem and Maria, in two sentences |
