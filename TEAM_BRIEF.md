@@ -1,4 +1,6 @@
-# Interview Practice in Your Language: Team Brief
+# Shift Up: Team Brief
+
+Shift Up is interview practice in your language. "Shift" is how hourly work is counted; "up" is the better-paying job.
 
 sunhacks 2026 project overview for the team. Submission is due **Sunday Nov 15, 11:00am MST**.
 
@@ -159,7 +161,7 @@ Builder A owns the API (server routes and outside services). Builder B owns the 
 - [ ] A9. Session log and `progress`
 - [ ] A10. Seed and reset script: Maria, two earlier sessions, the agency job posting
 - [ ] A11. Use the pasted job posting when picking questions
-- [ ] A12. Only if time: resume upload into memory
+- [x] A12. Resume: built as optional pasted text, with a sample resume for the demo. It feeds the sample answers and is not stored in memory
 - [ ] A13. `coach`: Spanish question in, Claude answers as the coach with the turn's context, Spanish voice out
 - [ ] A14. Optional: Gemini behaviour notes from the recording, with a 4-second limit
 

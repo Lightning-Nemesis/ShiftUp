@@ -1,10 +1,10 @@
 # Architecture
 
-Interview Practice in Your Language, sunhacks 2026. This is the build reference for the two builders. The product brief, demo script and task split are in `TEAM_BRIEF.md`.
+Shift Up (interview practice in your language), sunhacks 2026. This is the build reference for the two builders. The product brief, demo script and task split are in `TEAM_BRIEF.md`.
 
 ## The design in one line
 
-Polly speaks, Transcribe listens for the words, plain code measures the delivery, Gemini listens for behaviour, Claude writes the feedback, and Supermemory remembers.
+Polly speaks, Transcribe listens for the words, plain code measures the delivery, a language model (Grok for now) writes the feedback, and Supermemory remembers.
 
 ## Final flow
 
@@ -41,13 +41,13 @@ The next time she starts a session, step 1 opens with what she struggled with la
 | Voice in (speech to text) | Amazon Transcribe, streaming | Returns each word with start time, end time and a confidence from 0 to 1. Same AWS credentials as Polly |
 | Delivery numbers | Our own code | Pace, start delay, pauses, unclear words. No model involved |
 | Behaviour observations from the recording | Gemini API (audio input) | Optional layer. Never blocks the answer. Enters the MLH Gemini prize |
-| Question picking and all learner-facing feedback | Claude Opus 5.5 (`claude-opus-5-5`), low effort, structured output | One model writes everything she reads, so the tone and the Spanish stay consistent |
+| All learner-facing feedback and the coach's replies | Grok (`grok-4.20-0309-non-reasoning`) for now, with structured output; Claude Opus 5.5 if there is no Grok key | One model writes everything she reads, so the tone and the Spanish stay consistent. Questions are picked by plain code, not the model |
 | Learner memory across sessions | Supermemory v5 | One namespace per learner |
 | Session numbers for the progress view | Local JSON file | MongoDB Atlas instead if we want that prize |
 | App | Next.js with TypeScript, one repo | Screen and API routes together |
 | Hosting | Local laptop for the demo; Vercel for the Devpost link | |
 
-How to reach Claude: use an Anthropic API key if we have one. If we only have AWS credentials, Claude is also offered through Amazon Bedrock, provided model access is enabled in our AWS account. If neither works within 20 minutes, use Gemini for the written feedback too; the route contract below does not change.
+Which language model: `lib/llm.ts` uses Grok when `GROK_API_KEY` is set and Claude when only `ANTHROPIC_API_KEY` is. We switched to Grok on Saturday evening because the Anthropic account had no credit. Grok's non-reasoning model answers in two to three seconds; its larger models took 12 to 16 seconds on the same request, too slow for a spoken conversation. The route contract does not depend on which model is used.
 
 ## Diagram
 
@@ -88,13 +88,13 @@ Target: under 8 seconds from the end of her answer to feedback on screen. Show t
 
 ## API contract
 
-Builder B can build against these shapes with fake data from the first hour.
+Builder B can build against these shapes with fake data from the first hour. The routes already exist: any route whose service has no key in `.env.local` answers with fake data and adds `"fake": true` to the response. The TypeScript types for every shape are in `lib/types.ts`.
 
 ### `POST /api/session/start`
 
 ```json
 // request
-{ "learnerId": "maria", "role": "home_health_aide", "jobPosting": "optional pasted text" }
+{ "learnerId": "maria", "role": "home_health_aide", "jobPosting": "optional pasted text", "resume": "optional pasted text" }
 
 // response
 {
@@ -125,7 +125,8 @@ Builder B can build against these shapes with fake data from the first hour.
 
 // response
 {
-  "audioBase64": "<mp3>",
+  "audioBase64": "<audio>",
+  "audioMime": "audio/mpeg",
   "visemes": [{ "timeMs": 0, "value": "t" }, { "timeMs": 85, "value": "E" }],
   "words":   [{ "timeMs": 0, "value": "Tell" }, { "timeMs": 210, "value": "me" }]
 }
@@ -146,6 +147,7 @@ Multipart form: `audio` (16 kHz, mono, signed 16-bit PCM), `sessionId`, `questio
                 "speakingMs": 21400, "unclearWords": ["medication", "schedule"] },
   "feedback": {
     "content": {
+      "wrongWay": false,
       "good": { "es": "...", "en": "..." },
       "fix":  { "es": "...", "en": "..." },
       "sampleAnswerEn": "...",
@@ -163,6 +165,8 @@ Multipart form: `audio` (16 kHz, mono, signed 16-bit PCM), `sessionId`, `questio
 ```
 
 `practiseNext.kind` is `word`, `start`, `pace` or `phrase`. When `language` is `es-US`, the `delivery` feedback is omitted, because delivery is only assessed on English answers.
+
+**When she asks the interviewer to repeat.** If what she said is a short request such as "Could you say that again more slowly?" (`lib/rescue.ts`), the route answers `{ "repeat": true, "transcript": "..." }` instead of feedback. The screen then has the interviewer say the question again slowly and listens again. Nothing is graded, remembered or logged, because asking is the right move in a real interview. The phrase is shown beside the microphone while she is being listened to. The patterns are strict so that a real answer using the same words is not thrown away; an answer longer than 16 words is never treated as a request.
 
 ### `GET /api/progress?learnerId=maria`
 
@@ -189,7 +193,7 @@ The face is not a video and uses no avatar service. It is a drawing that the bro
 
 ### How the processing works
 
-1. **Draw the face once.** One SVG: head, eyes, eyebrows, and nine mouth shapes as separate groups, with only one visible at a time. Drawing them ourselves is free and avoids licensing questions. PNG images work the same way.
+1. **Draw the face once.** One SVG portrait with shaded skin, hair, eyes and clothing, shown in a frame like a video call (`components/Face.tsx`). Drawing it ourselves is free and avoids licensing questions. The mouth is not a set of swapped pictures: each of the nine mouth groups below is a pose (how open, how wide, how rounded, which teeth show, where the tongue is), and the lips, teeth, tongue and jaw are redrawn from those numbers every frame. `/status/faces` shows all nine poses side by side.
 2. **Get the timings.** For each line of speech, Polly returns a list of mouth-shape events, one JSON object per line, for example `{"time":125,"type":"viseme","value":"p"}`. The server parses them into the `visemes` array of the `speak` response.
 3. **Map Polly's symbols to our nine mouths.** US English uses 17 symbols plus `sil` for silence:
 
@@ -222,8 +226,8 @@ function tick() {
 audio.onplay = () => { i = 0; requestAnimationFrame(tick) }
 ```
 
-5. **Smooth it.** Ignore any mouth event shorter than about 60 milliseconds so the mouth doesn't flicker, and fade between shapes over 40–60 milliseconds with a CSS transition.
-6. **Make it feel alive.** A blink every 3–5 seconds and a small head movement cost a few lines and stop the face looking frozen while she thinks.
+5. **Smooth it.** Ignore any mouth event shorter than about 55 milliseconds so the mouth doesn't flicker, and ease the mouth from one pose toward the next every frame (about 45 milliseconds to settle), so sounds blend into each other the way they do on a real face.
+6. **Make it feel alive.** Blinks every few seconds, small glances, a slight head sway, and a nod and brow lift that follow the speech stop the face looking frozen. All of it is switched off for people who ask their device for reduced motion, except the lip sync itself.
 
 ### Speed control and slow replay, with no extra calls
 
@@ -312,9 +316,10 @@ Spanish voices return their own symbol set for mouth shapes. Any symbol missing 
 | Number | How it is computed | When it is mentioned (starting points, untested) |
 |---|---|---|
 | Start delay | Start time of her first word (recording begins when the question ends) | More than 4 seconds |
-| Pace | Words divided by speaking time, per minute | Above about 170 words per minute. Slow speech is never flagged |
+| Pace | Words divided by speaking time, per minute | Above 250 words per minute. Polly's own voice at normal speed measures 225 to 245 here, so a lower bar calls ordinary speech rushed. Slow speech is never flagged |
 | Long pauses | Gaps between consecutive words longer than 1.5 seconds | Three or more in one answer |
-| Speaking time | Last word end minus first word start | Under 8 seconds: the answer is too short |
+| Length | Number of words | Fewer than 12 words: the answer is too short. Judged by words, not seconds, because a fast talker can say plenty in a few seconds |
+| Filler sounds | Count of "um", "uh" and similar in the transcript (Transcribe keeps them) | Three or more |
 | Unclear words | Words with confidence under 0.6, excluding short function words | Passed to Claude, which keeps at most two that matter to the answer |
 
 Set these generously. Pausing to find a word in a second language is normal.
@@ -325,9 +330,18 @@ Set these generously. Pausing to find a word in a second language is normal.
 - Its output is a few short English notes in JSON. Claude turns them into learner-facing feedback; Gemini's text is never shown directly.
 - The prompt forbids any comment on accent, origin or "sounding native."
 - Give it a 4-second limit. If it is late or fails, Claude writes the feedback from the numbers alone.
-- Gemini's documentation covers transcribing, summarising and answering questions about audio. It does not document judging delivery. Test it on our Spanish speaker's voice first, and drop it if the notes are vague or wrong.
+- Built in `lib/gemini.ts`, using Google's Interactions API and the fast model `gemini-3.5-flash-lite`, which replies in about 2.5 seconds. It runs while Transcribe is working, so it adds no waiting. (`gemini-4-hydrogen` gave slightly richer notes but took about 5 seconds.)
+- What testing showed, on four generated recordings: it told a hesitant answer from a steady one every time, and commented sensibly on tone ("flat", "sounds as if reading"). It did not notice a recording played at 4% volume or a voice fading out, so the prompt tells it not to judge loudness.
+- Because it is one listener's impression, the feedback writer may use at most one of its notes, as a gentle suggestion about tone or rhythm. Whether she "sounded sure" is decided by the measurements, not by Gemini.
+- Not yet tried on a real person's voice. On generated speech it tends to say "sounds as if reading from a script", which is true of a synthetic voice and may or may not carry over.
+
+## Voice mode for feedback
+
+A switch at the top of the feedback, "Read my feedback aloud". When it is on, the coach reads the main points as soon as feedback arrives: what she did well, the one fix, and what to practise next. It reads in the language the page is set to (Spanish voice for Spanish, English voice for English), the face changes to the coach, and a Listen/Stop button replays or stops it. The choice is remembered on her device. It uses the same `speak` route as everything else, so the mouth follows the words.
 
 ## Written feedback: Claude
+
+Model in use: Grok `grok-4.20-0309-non-reasoning`, about 2 seconds per answer. Compared on 15 Nov on the same three answers: the reasoning variant and `grok-4.5` took 15 to 25 seconds with no better feedback, `grok-4.6` timed out at 30 seconds, and `grok-4.7` was at capacity. `GROK_MODEL` in `.env` switches the model.
 
 One call per answer. Inputs: the question and its type, the transcript, the delivery numbers, Gemini's notes if present, her profile, and the job posting if there is one. Output: the `feedback` object in the contract, enforced with structured output so the screen never has to parse free text.
 
@@ -335,6 +349,11 @@ Rules in the prompt:
 
 - The sample answer may only use details from `usedDetails`, which must be things she said (or that are on her resume). Keep it at her English level.
 - One good thing, one fix. One `practiseNext` for delivery.
+- `wrongWay` is true when the answer goes the wrong way: it answers a different question, or it would count against her (speaking badly of a client, family, coworker or employer; something unsafe; being unreliable with no change; money as the only reason). The fix then says so plainly, tells her not to answer like this, and says what the interviewer wants instead; the screen shows it as a "Do not answer this way" card. A thin answer in the right direction is not flagged.
+- The fix checks two things first, because US interviewers expect them and modest speakers leave them out: that she says "I" for what she did herself (only when every action is told as "we"; a "we" for something done together is left alone), and that the story says how it ended. It may never make up an ending: it gives a blank such as "In the end, [what happened]".
+- With no story to build on, the sample answer is a frame of blanks, never an invented story. If she leaves out who it was or what it was about, those stay blanks too.
+- A pasted resume supplies facts for the sample answer (years of experience, duties, training). On a question that asks for a story ("Tell me about a time…") the resume is not sent at all: the model kept writing an event around resume facts, so the story has to be hers. This is enforced in code in `writeFeedback`, not by the prompt.
+- Every request ends with a source check: each fact about her in the sample answer must come from the transcript, her remembered stories or her resume. The interview question and the job posting are not sources of facts about her.
 - Never comment on accent or origin. No pronunciation score. Say "the software didn't catch this word," not "you said it wrong."
 - Feedback in Spanish first, with English alongside.
 
@@ -343,6 +362,7 @@ The same model picks the next question (see below). Use low effort for both call
 ## Questions
 
 - **Bank:** `data/questions.hha.json`, 8–10 hand-written questions for home health aide, in English and Spanish, reviewed by our Spanish speaker.
+- **What they want to hear:** each bank question also carries `askingEn` and `askingEs`, one hand-written line on what the interviewer is really asking. A "What are they asking?" link under the question opens it. It is fixed text, so it needs no model call and cannot fail in a demo.
 - **From a posting:** when she pastes a job posting, Claude writes one or two questions from what it asks for.
 - **Follow-ups:** Claude may ask one follow-up built on her last answer.
 - **Fixed types**, used by every question whatever its source: `conflict`, `reliability`, `client_care`, `safety_physical`, `why_this_job`, `availability`. Weak-spot memory and the progress view depend on these.
@@ -357,7 +377,7 @@ The same model picks the next question (see below). Use low effort for both call
 - **Why `dreaming: "instant"`:** by default, memories can take several minutes to form, and a new namespace can show an empty profile in that time. Instant mode makes them readable right away, at one extra billed operation per document.
 - **Local fallback:** also write weak spots to `data/local/<learner>.json`. If the profile comes back empty or slow, the memory beat in the demo uses the local copy.
 - **Seed early:** run the seed script well before judging, not minutes before.
-- **Resume, if built:** `client.documents.uploadFile` into the same namespace.
+- **Resume:** built as optional pasted text on the setup page, with a sample resume for the demo learner (`data/seed/demo.json`). The sample posting and the sample resume are both offered as buttons as soon as the setup page opens. "Upload a file" sends a PDF, Word `.docx` or text file (5 MB at most) to `POST /api/resume`, which returns its text for the resume box (`unpdf` and `mammoth` do the reading; the file is not stored). A scanned resume has no text to read and gets an error. It is kept in the session only and is never written to Supermemory, because a resume carries personal details.
 - This project is on v5. Do not use `containerTag`, `customId`, or any path containing `/v3/` or `/v4/`.
 
 ## Files
@@ -388,7 +408,7 @@ Kept in `.env.local`, which is git-ignored and never committed:
 - `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`
 - `GEMINI_API_KEY`
 - `SUPERMEMORY_API_KEY`
-- `ANTHROPIC_API_KEY` (not needed if we reach Claude through Bedrock)
+- `GROK_API_KEY` (the language model in use), or `ANTHROPIC_API_KEY` to use Claude
 
 The AWS user needs permission to call Polly's speech synthesis and Transcribe's streaming transcription.
 
@@ -495,18 +515,25 @@ Cut in this order: resume upload, extra roles, the Gemini layer, job-posting que
 
 ## Not verified yet
 
-Check each of these in the first hours, before building on it:
+Checked on Saturday evening:
 
-1. Our AWS credentials can call Polly and Transcribe streaming, in a region that offers both.
-2. The Polly voice we pick returns mouth-shape timings. Not every Polly voice type may.
-3. Transcribe streaming handles Spanish (`es-US`) as well as English.
+- Polly works with our keys and returns mouth-shape timings for the English voice (Joanna) and the Spanish voice (Lupe). Neural voices work in `us-east-1` and `us-west-2`; `us-east-2` only offers the standard voices, and the code falls back to them automatically.
+- Supermemory works: seeding, reading the profile at session start, and writing a turn back. Memories become readable roughly half a minute after a write.
+- Transcribe works since the AWS account was upgraded to the paid plan (before that, every call was refused with `SubscriptionRequiredException`). A recording with a known 5-second delay and 2-second pause came back with the right start delay and pause count, which confirms the word times are in seconds. Spanish works too.
+- Grok writes the feedback and the coach's replies in both languages in two to four seconds. A 15-second spoken answer returned full feedback in under 7 seconds.
+- The whole spoken turn has been run with real services: Polly, Transcribe, the delivery numbers, Grok and Supermemory.
+
+Still to check, before building on it:
+
+1. Transcription and feedback on a real person's voice through a real microphone. Every check so far used a generated voice.
+2. The Claude path in `lib/llm.ts`, which has never run against the real service.
+3. Whether the sample answers ever include details she did not say. They are told not to, and did not in our checks, but this is a model following an instruction, not a guarantee.
 4. Whether Transcribe keeps "um" and "uh" in its output. If it drops them, fillers leave the confidence signal.
 5. Gemini gives useful notes on delivery from a recording of our Spanish speaker.
 6. The end-to-end wait is under 8 seconds.
 7. Claude access: Anthropic key, or Bedrock model access on our AWS account.
 8. The delivery thresholds, tried on real answers.
-9. A Spanish Polly voice returns mouth-shape timings for the coach.
-10. Slowed playback (`playbackRate` 0.5) still sounds clear enough for the word replay.
+9. Slowed playback (`playbackRate` 0.5) still sounds clear enough for the word replay. If not, `speak` with `speed: "x-slow"` returns a slower recording with matching timings.
 
 ## Sources
 
