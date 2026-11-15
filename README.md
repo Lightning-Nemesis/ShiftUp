@@ -9,13 +9,7 @@
   Built at sunhacks 2026.
 </p>
 
-<p align="center">
-  <a href="docs/screenshots/composition_2026-11-15_02-26-22.mp4">
-    <img src="docs/screenshots/highlight-poster.jpg" alt="A frame from the highlight video: the interviewer asks a follow-up that repeats the learner's own words." width="900">
-  </a>
-  <br>
-  <a href="docs/screenshots/composition_2026-11-15_02-26-22.mp4"><b>Watch the 24-second highlight video</b></a>
-</p>
+https://github.com/user-attachments/assets/8ca7dcd5-9518-4bda-8cae-a54cbec02daf
 
 <p align="center">
   <img src="docs/screenshots/interview.png" alt="The interviewer asks a question aloud. A note above it says: Welcome back, Jaciel. Last time, questions about disagreements at work were hard for you." width="900">
