@@ -94,6 +94,33 @@ There is no leaderboard and no grade. Each session is set beside your own earlie
   <img src="docs/screenshots/phone-feedback.png" alt="The feedback on a phone." width="250">
 </p>
 
+## Architecture
+
+<p align="center">
+  <img src="docs/architecture.svg" alt="System architecture: the browser sends recorded audio to Next.js API routes on AWS Lightsail. The routes call Amazon Polly for speech, Amazon Transcribe for speech to text, Gemini to listen to the recording, Supermemory for long-term memory, and Grok agents that act as interviewer, feedback writer and coach." width="920">
+</p>
+
+The Next.js API routes are the orchestrator. The browser never talks to a model or to AWS directly, so no key leaves the server.
+
+| Part | Technology | What it does |
+|---|---|---|
+| The brain | xAI Grok (`grok-4.20-0309-non-reasoning`) | Three prompt-defined agents. The interviewer decides whether to follow up or move on, the feedback writer produces the bilingual feedback, and the coach answers in Spanish. Each returns JSON checked against a zod schema. |
+| Long-term memory | Supermemory v5 | One namespace per learner. It extracts work stories and weak spots from each turn and returns them at the start of the next session. A local JSON copy is the fallback. |
+| Audio listener | Gemini (`gemini-3.5-flash-lite`) | Hears the recording itself and rates whether the speaker sounded sure, with notes on tone and hesitation. It runs alongside transcription with a four-second limit. |
+| Speech to text | Amazon Transcribe (streaming) | Takes 16 kHz PCM and returns each word with its start time, end time and confidence. |
+| Text to speech | Amazon Polly | Returns the voice plus the timing of every mouth shape and word, which drives the lip sync and the slow word replay. |
+| Delivery analysis | Our own code (`lib/delivery.ts`) | Start delay, long pauses, filler sounds and pace, computed from the word timings. |
+| App | Next.js 16, React 19, TypeScript, zod | API routes on the server. In the browser, an AudioWorklet recorder and an SVG face animated from the audio clock. |
+| Hosting | AWS Lightsail, Caddy, systemd | One Ubuntu instance, with HTTPS certificates from Let's Encrypt. |
+| Tests | Vitest | 67 unit tests covering delivery analysis, question selection, pronunciation help, repeat requests and session logic. |
+
+### Engineering decisions
+
+- **Measurements decide, the model words it.** Whether a learner sounded sure comes from measured timings. Gemini's impression is advisory, and the feedback writer may use at most one of its notes.
+- **Grounded answers.** The stronger answer may only use the transcript, the remembered stories and the resume. Anything else is a blank in square brackets, and the resume is withheld on questions that ask for a story.
+- **Latency.** Gemini runs while Transcribe is working, and Grok's fast model answers in about two seconds. On the deployed server, a seven-second spoken answer came back with full feedback in about six seconds.
+- **Every service has a fallback.** A failed microphone falls back to typing, a slow question writer to the planned question, and unavailable memory to the local copy.
+
 ## What happens in one turn
 
 1. The interviewer speaks the question. Her mouth is drawn in the browser and timed to the speech, so there is no video.

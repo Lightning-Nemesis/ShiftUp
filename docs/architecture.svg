@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 724" width="1000" height="724" role="img" aria-labelledby="t d">
+  <title id="t">ShiftUp system architecture</title>
+  <desc id="d">The browser sends recorded audio to Next.js API routes on AWS Lightsail. The routes call Amazon Polly for speech, Amazon Transcribe for speech to text, Gemini to listen to the recording, Supermemory for long-term memory, and Grok agents that act as interviewer, feedback writer and coach.</desc>
+  <style>
+    .sans { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .title { font-size: 17px; font-weight: 700; fill: #f2f6f8; }
+    .line { font-size: 13px; fill: #b4c1ca; }
+    .tag { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; }
+    .route { font-size: 12.5px; fill: #d5dee4; }
+    .edge { font-size: 11px; fill: #8fa2ae; }
+    .box { fill: #17242d; stroke: #2c3f4b; stroke-width: 1; }
+    .wire { fill: none; stroke: #6c8290; stroke-width: 1.5; }
+    .step { font-size: 15px; font-weight: 700; fill: #f2f6f8; }
+    .small { font-size: 12.5px; fill: #b4c1ca; }
+    .num { font-size: 12px; font-weight: 700; fill: #101a22; }
+  </style>
+  <defs>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#22323d"/>
+    </pattern>
+    <marker id="end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#6c8290"/>
+    </marker>
+    <marker id="start" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M10 0 L0 5 L10 10 z" fill="#6c8290"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="724" rx="16" fill="#101a22"/>
+  <rect width="1000" height="724" rx="16" fill="url(#dots)"/>
+
+  <!-- Header -->
+  <text x="30" y="40" class="mono tag" fill="#45c4b5" style="letter-spacing:3px">SHIFTUP</text>
+  <text x="30" y="68" class="sans" font-size="24" font-weight="700" fill="#f2f6f8">System architecture</text>
+  <text x="970" y="44" text-anchor="end" class="mono edge" font-size="12">Next.js 16 · React 19 · TypeScript</text>
+  <text x="970" y="64" text-anchor="end" class="mono edge" font-size="12">67 unit tests · hosted on AWS Lightsail</text>
+
+  <!-- Wires, row 1 -->
+  <path class="wire" d="M270 150 H348" marker-end="url(#end)"/>
+  <text x="310" y="141" text-anchor="middle" class="mono edge">PCM audio</text>
+  <path class="wire" d="M350 214 H272" marker-end="url(#end)"/>
+  <text x="310" y="205" text-anchor="middle" class="mono edge">JSON + MP3</text>
+  <path class="wire" d="M652 138 H728" marker-start="url(#start)" marker-end="url(#end)"/>
+  <text x="690" y="129" text-anchor="middle" class="mono edge">text</text>
+  <path class="wire" d="M652 234 H728" marker-start="url(#start)" marker-end="url(#end)"/>
+  <text x="690" y="225" text-anchor="middle" class="mono edge">PCM stream</text>
+
+  <!-- Wires, server to row 2 -->
+  <path class="wire" d="M390 278 V313 H150 V348" marker-start="url(#start)" marker-end="url(#end)"/>
+  <text x="270" y="304" text-anchor="middle" class="mono edge">stories, weak spots</text>
+  <path class="wire" d="M500 278 V346" marker-start="url(#start)" marker-end="url(#end)"/>
+  <text x="511" y="318" class="mono edge">prompt → JSON</text>
+  <path class="wire" d="M610 278 V313 H850 V348" marker-start="url(#start)" marker-end="url(#end)"/>
+  <text x="730" y="304" text-anchor="middle" class="mono edge">WAV recording</text>
+
+  <!-- Browser -->
+  <rect class="box" x="30" y="96" width="240" height="180" rx="10"/>
+  <rect x="30" y="106" width="3" height="160" fill="#9fb3c0"/>
+  <text x="46" y="120" class="mono tag" fill="#9fb3c0">CLIENT</text>
+  <text x="46" y="144" class="sans title">Browser · React 19</text>
+  <text x="46" y="170" class="sans line">Mic → AudioWorklet → 16 kHz PCM</text>
+  <text x="46" y="191" class="sans line">SVG face lip-synced to visemes</text>
+  <text x="46" y="212" class="sans line">Captions and feedback, EN + ES</text>
+  <text x="46" y="233" class="sans line">Typed answers if the mic fails</text>
+  <text x="46" y="254" class="sans line">Slow replay of any word</text>
+
+  <!-- Server -->
+  <rect class="box" x="350" y="96" width="300" height="180" rx="10"/>
+  <rect x="350" y="106" width="3" height="160" fill="#45c4b5"/>
+  <text x="366" y="120" class="mono tag" fill="#45c4b5">ORCHESTRATOR</text>
+  <text x="366" y="144" class="sans title">Next.js API routes</text>
+  <text x="366" y="166" class="sans line">AWS Lightsail · Caddy HTTPS · systemd</text>
+  <text x="366" y="192" class="mono route">/api/session/start  /api/speak</text>
+  <text x="366" y="211" class="mono route">/api/answer  /api/question/next</text>
+  <text x="366" y="230" class="mono route">/api/coach  /api/progress</text>
+  <text x="366" y="256" class="sans line"><tspan class="mono" fill="#45c4b5" font-size="12.5">delivery.ts</tspan>  wait, pauses, pace, fillers</text>
+
+  <!-- AWS -->
+  <rect class="box" x="730" y="96" width="240" height="84" rx="10"/>
+  <rect x="730" y="106" width="3" height="64" fill="#f0a94a"/>
+  <text x="746" y="120" class="mono tag" fill="#f0a94a">AWS · TEXT TO SPEECH</text>
+  <text x="746" y="144" class="sans title">Amazon Polly</text>
+  <text x="746" y="166" class="sans line">MP3 voice + viseme timings</text>
+
+  <rect class="box" x="730" y="192" width="240" height="84" rx="10"/>
+  <rect x="730" y="202" width="3" height="64" fill="#f0a94a"/>
+  <text x="746" y="216" class="mono tag" fill="#f0a94a">AWS · SPEECH TO TEXT</text>
+  <text x="746" y="240" class="sans title">Amazon Transcribe</text>
+  <text x="746" y="262" class="sans line">Per-word times and confidence</text>
+
+  <!-- Supermemory -->
+  <rect class="box" x="30" y="350" width="240" height="176" rx="10"/>
+  <rect x="30" y="360" width="3" height="156" fill="#7ea6f5"/>
+  <text x="46" y="374" class="mono tag" fill="#7ea6f5">LONG-TERM MEMORY</text>
+  <text x="46" y="398" class="sans title">Supermemory</text>
+  <text x="46" y="424" class="sans line">One namespace per learner</text>
+  <text x="46" y="445" class="sans line">Buckets: stories, weak spots</text>
+  <text x="46" y="466" class="sans line">Read when a session starts</text>
+  <text x="46" y="487" class="sans line">Local JSON copy as fallback</text>
+  <text x="46" y="508" class="sans line">Writes never delay feedback</text>
+
+  <!-- Grok: the brain -->
+  <rect x="344" y="344" width="312" height="188" rx="14" fill="none" stroke="#f2775c" stroke-opacity="0.28" stroke-width="2"/>
+  <rect x="350" y="350" width="300" height="176" rx="10" fill="#1d2730" stroke="#f2775c" stroke-width="1.5"/>
+  <text x="366" y="374" class="mono tag" fill="#f2775c">THE BRAIN</text>
+  <text x="366" y="398" class="sans title">Grok agents</text>
+  <text x="366" y="419" class="sans small">Structured JSON, validated with zod</text>
+  <g class="mono" font-size="12" font-weight="700" text-anchor="middle" fill="#ffd9cf">
+    <rect x="366" y="432" width="100" height="24" rx="12" fill="#f2775c" fill-opacity="0.16" stroke="#f2775c" stroke-opacity="0.6"/>
+    <text x="416" y="448.5">Interviewer</text>
+    <rect x="366" y="462" width="100" height="24" rx="12" fill="#f2775c" fill-opacity="0.16" stroke="#f2775c" stroke-opacity="0.6"/>
+    <text x="416" y="478.5">Feedback</text>
+    <rect x="366" y="492" width="100" height="24" rx="12" fill="#f2775c" fill-opacity="0.16" stroke="#f2775c" stroke-opacity="0.6"/>
+    <text x="416" y="508.5">Coach</text>
+  </g>
+  <text x="478" y="448.5" class="sans small">follows up or moves on</text>
+  <text x="478" y="478.5" class="sans small">one fix, in EN + ES</text>
+  <text x="478" y="508.5" class="sans small">side chat in Spanish</text>
+
+  <!-- Gemini -->
+  <rect class="box" x="730" y="350" width="240" height="176" rx="10"/>
+  <rect x="730" y="360" width="3" height="156" fill="#b79cf6"/>
+  <text x="746" y="374" class="mono tag" fill="#b79cf6">AUDIO LISTENER</text>
+  <text x="746" y="398" class="sans title">Gemini</text>
+  <text x="746" y="424" class="sans line">Hears the raw recording</text>
+  <text x="746" y="445" class="sans line">Rates: did they sound sure?</text>
+  <text x="746" y="466" class="sans line">Notes on tone and hesitation</text>
+  <text x="746" y="487" class="sans line">Runs in parallel, 4 s limit</text>
+  <text x="746" y="508" class="sans line">Told to ignore accent</text>
+
+  <!-- One turn -->
+  <text x="30" y="564" class="mono tag" fill="#45c4b5">ONE SPOKEN TURN<tspan dx="8" fill="#8fa2ae" font-weight="400" style="letter-spacing:0">· about 6 s from the end of the answer to full feedback</tspan></text>
+
+  <g>
+    <rect class="box" x="30" y="580" width="146" height="86" rx="10"/>
+    <circle cx="52" cy="604" r="11" fill="#f0a94a"/>
+    <text x="52" y="608.5" text-anchor="middle" class="mono num">1</text>
+    <text x="72" y="609" class="sans step">Ask</text>
+    <text x="44" y="634" class="sans small">Polly speaks, the</text>
+    <text x="44" y="652" class="sans small">mouth follows</text>
+
+    <rect class="box" x="188.8" y="580" width="146" height="86" rx="10"/>
+    <circle cx="210.8" cy="604" r="11" fill="#9fb3c0"/>
+    <text x="210.8" y="608.5" text-anchor="middle" class="mono num">2</text>
+    <text x="230.8" y="609" class="sans step">Record</text>
+    <text x="202.8" y="634" class="sans small">Mic audio as</text>
+    <text x="202.8" y="652" class="sans small">16 kHz PCM</text>
+
+    <rect class="box" x="347.6" y="580" width="146" height="86" rx="10"/>
+    <circle cx="369.6" cy="604" r="11" fill="#b79cf6"/>
+    <text x="369.6" y="608.5" text-anchor="middle" class="mono num">3</text>
+    <text x="389.6" y="609" class="sans step">Hear</text>
+    <text x="361.6" y="634" class="sans small">Transcribe, Gemini</text>
+    <text x="361.6" y="652" class="sans small">run in parallel</text>
+
+    <rect class="box" x="506.4" y="580" width="146" height="86" rx="10"/>
+    <circle cx="528.4" cy="604" r="11" fill="#45c4b5"/>
+    <text x="528.4" y="608.5" text-anchor="middle" class="mono num">4</text>
+    <text x="548.4" y="609" class="sans step">Measure</text>
+    <text x="520.4" y="634" class="sans small">Wait, pauses, pace</text>
+    <text x="520.4" y="652" class="sans small">from word timings</text>
+
+    <rect class="box" x="665.2" y="580" width="146" height="86" rx="10"/>
+    <circle cx="687.2" cy="604" r="11" fill="#f2775c"/>
+    <text x="687.2" y="608.5" text-anchor="middle" class="mono num">5</text>
+    <text x="707.2" y="609" class="sans step">Coach</text>
+    <text x="679.2" y="634" class="sans small">Grok writes the</text>
+    <text x="679.2" y="652" class="sans small">feedback, EN + ES</text>
+
+    <rect class="box" x="824" y="580" width="146" height="86" rx="10"/>
+    <circle cx="846" cy="604" r="11" fill="#7ea6f5"/>
+    <text x="846" y="608.5" text-anchor="middle" class="mono num">6</text>
+    <text x="866" y="609" class="sans step">Remember</text>
+    <text x="838" y="634" class="sans small">Supermemory keeps</text>
+    <text x="838" y="652" class="sans small">the stories</text>
+  </g>
+  <g fill="none" stroke="#6c8290" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M180 618 l5 5 l-5 5"/>
+    <path d="M338.8 618 l5 5 l-5 5"/>
+    <path d="M497.6 618 l5 5 l-5 5"/>
+    <path d="M656.4 618 l5 5 l-5 5"/>
+    <path d="M815.2 618 l5 5 l-5 5"/>
+  </g>
+
+  <!-- Guardrails -->
+  <text x="30" y="700" class="mono edge" font-size="11.5"><tspan fill="#45c4b5" font-weight="700" style="letter-spacing:1.5px">GUARDRAILS</tspan>  no accent scoring · no invented facts, blanks instead · a fallback for every external service</text>
+</svg>
