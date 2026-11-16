@@ -18,10 +18,19 @@ const STEPS: { icon: IconName; title: StringKey; body: StringKey }[] = [
   { icon: "bookmark", title: "how4t", body: "how4" },
 ]
 
+// The jobs to practise for. Each has its own questions, sample posting, sample resume and demo history.
+const JOBS = [
+  { id: "home_health_aide", label: "roleHha" },
+  { id: "retail_associate", label: "roleRetail" },
+  { id: "warehouse_associate", label: "roleWarehouse" },
+] as const
+type JobId = (typeof JOBS)[number]["id"]
+
 export default function Home() {
   const router = useRouter()
   const { lang, setLang, t } = useUiLang()
   const [name, setName] = useState(DEFAULT_NAME)
+  const [role, setRole] = useState<JobId>("home_health_aide")
   const [posting, setPosting] = useState("")
   const [resume, setResume] = useState("")
   const [upload, setUpload] = useState<"idle" | "reading" | "error">("idle")
@@ -33,15 +42,25 @@ export default function Home() {
   useEffect(() => setName(loadName()), [])
   const shownName = name.trim() || DEFAULT_NAME
 
+  const sampleResume = (job: JobId) => sample.roles[job].resume.replaceAll("{name}", shownName)
+
   function changeName(value: string) {
     setName(value)
     setDemo("idle") // the demo history belongs to one name
   }
 
+  function changeRole(next: JobId) {
+    // A sample left in a box belongs to the old job, so it follows the choice. Her own text is left alone.
+    if (posting === sample.roles[role].jobPosting) setPosting(sample.roles[next].jobPosting)
+    if (resume === sampleResume(role)) setResume(sampleResume(next))
+    setRole(next)
+    setDemo("idle") // and so does the demo history
+  }
+
   async function loadDemo() {
     setDemo("loading")
     try {
-      await api.seed({ learnerId: learnerIdFor(shownName), name: shownName })
+      await api.seed({ learnerId: learnerIdFor(shownName), name: shownName, role })
       setDemo("loaded")
     } catch {
       setDemo("error")
@@ -62,7 +81,7 @@ export default function Home() {
 
   function start() {
     saveName(shownName)
-    saveSetup({ learnerId: learnerIdFor(shownName), name: shownName, role: "home_health_aide", jobPosting: posting.trim() || undefined, resume: resume.trim() || undefined, spanishFirst })
+    saveSetup({ learnerId: learnerIdFor(shownName), name: shownName, role, jobPosting: posting.trim() || undefined, resume: resume.trim() || undefined, spanishFirst })
     router.push("/interview")
   }
 
@@ -147,10 +166,14 @@ export default function Home() {
 
               <div className="field">
                 <label htmlFor="role">{t("roleLabel")}</label>
-                <select id="role" className="select" defaultValue="home_health_aide">
-                  <option value="home_health_aide">{t("roleHha")}</option>
+                <select id="role" className="select" value={role} onChange={(e) => changeRole(e.target.value as JobId)}>
+                  {JOBS.map((job) => (
+                    <option key={job.id} value={job.id}>
+                      {t(job.label)}
+                    </option>
+                  ))}
                 </select>
-                <span className="hint">{t("roleSoon")}</span>
+                <span className="hint">{t("roleHint")}</span>
               </div>
 
               <div className="field">
@@ -158,7 +181,7 @@ export default function Home() {
                 <textarea id="posting" className="textarea" value={posting} onChange={(e) => setPosting(e.target.value)} />
                 <span className="hint">{t("postingHint")}</span>
                 {!posting && (
-                  <button type="button" className="btn btn-ghost btn-sm" style={{ alignSelf: "flex-start" }} onClick={() => setPosting(sample.jobPosting)}>
+                  <button type="button" className="btn btn-ghost btn-sm" style={{ alignSelf: "flex-start" }} onClick={() => setPosting(sample.roles[role].jobPosting)}>
                     {t("postingSample")}
                   </button>
                 )}
@@ -174,7 +197,7 @@ export default function Home() {
                     {t("resumeUpload")}
                   </button>
                   {!resume && (
-                    <button type="button" className="btn btn-ghost btn-sm" onClick={() => setResume(sample.resume.replaceAll("{name}", shownName))}>
+                    <button type="button" className="btn btn-ghost btn-sm" onClick={() => setResume(sampleResume(role))}>
                       {t("resumeSample")}
                     </button>
                   )}

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "retail_why_01",
+    "type": "why_this_job",
+    "source": "bank",
+    "textEn": "Why do you want to work at our store?",
+    "textEs": "¿Por qué quiere trabajar en nuestra tienda?",
+    "askingEn": "They want a reason that is about the work, such as helping customers or liking what the store sells, and one thing you know about this store. Saying it is only for the money is not enough.",
+    "askingEs": "Quieren una razón que tenga que ver con el trabajo, como ayudar a los clientes o que le guste lo que vende la tienda, y algo que usted sepa de esta tienda. Decir que es solo por el dinero no basta."
+  },
+  {
+    "id": "retail_customer_01",
+    "type": "client_care",
+    "source": "bank",
+    "textEn": "Tell me about a time you helped a customer who was upset. What did you do?",
+    "textEs": "Cuénteme de una vez que ayudó a un cliente que estaba molesto. ¿Qué hizo usted?",
+    "askingEn": "They want one real example: what happened, what you did, and how it ended. They are checking that you stay calm and polite when a customer is not.",
+    "askingEs": "Quieren un ejemplo real: qué pasó, qué hizo usted y cómo terminó. Quieren ver que usted mantiene la calma y la cortesía aunque el cliente no lo haga."
+  },
+  {
+    "id": "retail_conflict_01",
+    "type": "conflict",
+    "source": "bank",
+    "textEn": "Tell me about a time you disagreed with a coworker or a supervisor. How did you handle it?",
+    "textEs": "Cuénteme de una vez que no estuvo de acuerdo con un compañero de trabajo o con un supervisor. ¿Cómo lo manejó?",
+    "askingEn": "They are not asking who was right. They want to hear that you listened, stayed respectful and looked for a solution.",
+    "askingEs": "No preguntan quién tenía la razón. Quieren oír que usted escuchó, mantuvo el respeto y buscó una solución."
+  },
+  {
+    "id": "retail_reliability_01",
+    "type": "reliability",
+    "source": "bank",
+    "textEn": "We need people who are on time for every shift. How do you make sure you are never late?",
+    "textEs": "Necesitamos personas que lleguen a tiempo a cada turno. ¿Cómo se asegura de no llegar tarde nunca?",
+    "askingEn": "They want your plan, not a promise: how you get to work, and what you do if the bus or the car fails.",
+    "askingEs": "Quieren su plan, no una promesa: cómo llega al trabajo y qué hace si falla el autobús o el carro."
+  },
+  {
+    "id": "retail_customer_02",
+    "type": "client_care",
+    "source": "bank",
+    "textEn": "A customer asks for a product and you do not know where it is. What do you do?",
+    "textEs": "Un cliente le pide un producto y usted no sabe dónde está. ¿Qué hace?",
+    "askingEn": "They want to hear that you do not leave the customer alone: you say you will find out, you ask a coworker or check, and you take the customer to the product.",
+    "askingEs": "Quieren oír que usted no deja solo al cliente: le dice que lo va a averiguar, pregunta a un compañero o lo revisa, y lleva al cliente hasta el producto."
+  },
+  {
+    "id": "retail_physical_01",
+    "type": "safety_physical",
+    "source": "bank",
+    "textEn": "This job means standing for a full shift and lifting boxes of up to 40 pounds. Tell me about work like this that you have done.",
+    "textEs": "En este trabajo hay que estar de pie todo el turno y levantar cajas de hasta 40 libras. Cuénteme de un trabajo parecido que haya hecho.",
+    "askingEn": "They want an honest answer and an example: a job where you were on your feet or lifted things, and that you lift safely and ask for help with something too heavy.",
+    "askingEs": "Quieren una respuesta honesta y un ejemplo: un trabajo donde estuvo de pie o levantó cosas, y que usted levanta con cuidado y pide ayuda si algo pesa demasiado."
+  },
+  {
+    "id": "retail_availability_01",
+    "type": "availability",
+    "source": "bank",
+    "textEn": "What days and hours can you work? Can you work weekends and holidays?",
+    "textEs": "¿Qué días y a qué horas puede trabajar? ¿Puede trabajar los fines de semana y los días festivos?",
+    "askingEn": "They want a clear, honest answer: the days, the hours, and whether weekends and holidays are possible. Say what you can do before what you cannot.",
+    "askingEs": "Quieren una respuesta clara y honesta: los días, las horas y si puede trabajar fines de semana y días festivos. Diga primero lo que sí puede hacer."
+  },
+  {
+    "id": "retail_busy_01",
+    "type": "reliability",
+    "source": "bank",
+    "textEn": "Tell me about a time your workplace was very busy. How did you keep up?",
+    "textEs": "Cuénteme de una vez que hubo mucho trabajo en su lugar de trabajo. ¿Cómo logró mantener el ritmo?",
+    "askingEn": "They want one real example that shows you stay organised under pressure: what was happening, what you did first, and how it ended.",
+    "askingEs": "Quieren un ejemplo real que muestre que usted se mantiene en orden bajo presión: qué estaba pasando, qué hizo primero y cómo terminó."
+  }
+]

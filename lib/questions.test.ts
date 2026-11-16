@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { pickNextQuestion, QUESTION_BANK } from "./questions"
+import { bankFor, pickNextQuestion, QUESTION_BANK } from "./questions"
+import { ROLES } from "./roles"
 import { QUESTION_TYPES } from "./types"
 
 describe("question bank", () => {
@@ -40,5 +41,38 @@ describe("pickNextQuestion", () => {
       asked.push(q.id)
     }
     expect(pickNextQuestion(["conflict"], asked).type).toBe("conflict")
+  })
+})
+
+describe("the question bank of every job", () => {
+  it.each(Object.entries(ROLES))("%s: a known type, both languages and a hint on every question", (_id, role) => {
+    expect(role.questions.length).toBeGreaterThanOrEqual(8)
+    for (const q of role.questions) {
+      expect(QUESTION_TYPES).toContain(q.type)
+      for (const text of [q.textEn, q.textEs, q.askingEn, q.askingEs]) expect(text?.length).toBeGreaterThan(10)
+    }
+  })
+
+  // The demo history marks disagreements as hard, and a session opens with "why this job".
+  it.each(Object.entries(ROLES))("%s: has a question about disagreements and one about wanting the job", (_id, role) => {
+    expect(role.questions.some((q) => q.type === "conflict")).toBe(true)
+    expect(role.questions.some((q) => q.type === "why_this_job")).toBe(true)
+  })
+
+  it("never reuses an id across jobs", () => {
+    const ids = Object.values(ROLES).flatMap((role) => role.questions.map((q) => q.id))
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+})
+
+describe("bankFor", () => {
+  it("gives each job its own questions", () => {
+    expect(bankFor("retail_associate")).toBe(ROLES.retail_associate.questions)
+    expect(bankFor("warehouse_associate")[0].id).toBe("wh_why_01")
+  })
+
+  it("falls back to home health aide for a job it does not know", () => {
+    expect(bankFor("astronaut")).toBe(QUESTION_BANK)
+    expect(bankFor(undefined)).toBe(QUESTION_BANK)
   })
 })

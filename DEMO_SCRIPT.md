@@ -146,8 +146,8 @@ Use these when a judge asks "what about…". The right-hand column says where to
 
 - It has not been tested with real learners yet. The caregiver Jaciel plays is invented.
 - The limits for a late start, pauses and fillers are our own judgment.
-- The Spanish for model-written questions has not been reviewed by a Spanish speaker. The ten bank questions and their hints should be.
-- It covers one job, home health aide.
+- The Spanish for model-written questions has not been reviewed by a Spanish speaker. The bank questions and their hints should be, above all the retail and warehouse ones, which are the newest.
+- It covers three jobs: home health aide, retail store associate and warehouse associate. This script uses home health aide; the other two were checked with typed answers only.
 - Any statistic you quote, such as the share of home care workers who are immigrants, should be checked against its source first. The ones we found came from search summaries.
 
 ## One line each, if asked

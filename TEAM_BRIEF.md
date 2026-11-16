@@ -51,7 +51,7 @@ Mock-interview apps are common. These are the differences.
 
 ## How it works
 
-1. The learner types a name and, if they want, pastes the posting for the job they are going for and a resume. Version one covers one role, home health aide.
+1. The learner types a name, picks the job (home health aide, retail store associate or warehouse associate) and, if they want, pastes the posting for it and a resume.
 2. The interviewer asks a question in English, out loud. Captions switch between English and Spanish, and there is a slower voice.
 3. The learner answers out loud, in English, or in Spanish first to work out the content.
 4. Feedback appears in both languages. Content: one thing that was good, one thing to fix, and a stronger answer built only from their own details. Delivery: one line each on clarity, confidence and naturalness, and one thing to practise next.
@@ -94,7 +94,7 @@ Each answer gets two kinds of feedback, both in Spanish and English together.
 
 | Part | What it does | Built with |
 |---|---|---|
-| Question bank | Ten hand-written questions for home health aide, tagged by type, each with a line on what the interviewer wants to hear | Static JSON |
+| Question banks | Hand-written questions for each job (ten for home health aide, eight each for retail and warehouse), tagged by type, each with a line on what the interviewer wants to hear | Static JSON |
 | Interviewer | Picks the next question from the learner's weak spots, follows up on answers, and words questions around the posting or resume | Grok (Claude as the alternative) |
 | Voice out | Question audio plus mouth-shape timing | Amazon Polly |
 | Voice in | Records the answer in the browser; returns the transcript with word timings and per-word confidence | Amazon Transcribe streaming |
@@ -134,7 +134,7 @@ How these fit together is in [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 - Test it with real learners. Three questions to ask them about their last interview in English: what was the hardest moment, how did they prepare and with whom, and was the hard part understanding the question, finding the words, or being understood?
 - Have a Spanish speaker review all the Spanish, including what the model writes.
-- Add more jobs: retail and warehouse first.
+- Add more jobs beyond the first three.
 
 ## Sources
 

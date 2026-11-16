@@ -78,3 +78,13 @@ describe("nextQuestion", () => {
     expect(write).toHaveBeenCalledTimes(1)
   })
 })
+
+describe("nextQuestion for another job", () => {
+  it("asks from that job's questions and tells the interviewer which job it is", async () => {
+    const session = createSession({ learnerId: "t", name: "T", role: "retail_associate", profile: { stories: [], weakSpots: ["conflict"] }, jobPosting: "Weekends required." })
+    write.mockResolvedValue(written("next"))
+    const first = await nextQuestion(session)
+    expect(first).toMatchObject({ id: "retail_conflict_01", type: "conflict" })
+    expect(write.mock.calls[0][0].job).toBe("sales associate at a retail store")
+  })
+})

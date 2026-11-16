@@ -1,7 +1,10 @@
-import bank from "../data/questions.hha.json"
+import { roleFor, ROLES } from "./roles"
 import { QUESTION_TYPES, type Question, type QuestionType } from "./types"
 
-export const QUESTION_BANK = bank as Question[]
+/** The home health aide bank: the first job, and the default. */
+export const QUESTION_BANK = ROLES.home_health_aide.questions
+/** The questions for one job. */
+export const bankFor = (role: string | undefined) => roleFor(role).questions
 
 const isType = (s: string): s is QuestionType => (QUESTION_TYPES as readonly string[]).includes(s)
 

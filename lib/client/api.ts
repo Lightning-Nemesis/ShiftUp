@@ -44,7 +44,7 @@ export const api = {
   coach: (fields: { sessionId: string; questionId: string; stage: "question" | "feedback"; text?: string; audio?: Blob; thread: CoachTurn[]; lastAnswer?: string; lastFeedback?: string }) =>
     send<CoachResponse>("/api/coach", form({ ...fields, thread: JSON.stringify(fields.thread) })),
   readResume: (file: File) => send<{ text: string }>("/api/resume", form({ file })),
-  seed: (body: { learnerId: string; name: string }) => send<{ ok: boolean; learnerId: string; jobPosting: string; memory: string }>("/api/demo/seed", json(body)),
+  seed: (body: { learnerId: string; name: string; role: string }) => send<{ ok: boolean; learnerId: string; jobPosting: string; memory: string }>("/api/demo/seed", json(body)),
   progress: (learnerId: string) => send<ProgressResponse>(`/api/progress?learnerId=${encodeURIComponent(learnerId)}`),
 }
 

@@ -98,7 +98,7 @@ What you receive: the interview question, a transcript of the learner's spoken a
 
 What you return:
 
-content.wrongWay: true only when the answer clearly goes the wrong way, which means one of two things. Either it does not answer the question that was asked: it answers a different question, or shows the question was misunderstood. Or it says something that would count against the learner with a real interviewer: speaking badly of a client, a family, a coworker or an employer; describing something unsafe or against the rules; saying they are often late or unreliable without saying what they changed; or giving money as the only reason for wanting the job. Money, hours or distance mentioned as one reason beside a real interest in the work is fine. A thin, short or imperfect answer that goes in the right direction is not a wrong one, and when in doubt this is false.
+content.wrongWay: true only when the answer clearly goes the wrong way, which means one of two things. Either it does not answer the question that was asked: it answers a different question, or shows the question was misunderstood. Or it says something that would count against the learner with a real interviewer: speaking badly of a client, a customer, a family, a coworker or an employer; describing something unsafe or against the rules; saying they are often late or unreliable without saying what they changed; or giving money as the only reason for wanting the job. Money, hours or distance mentioned as one reason beside a real interest in the work is fine. A thin, short or imperfect answer that goes in the right direction is not a wrong one, and when in doubt this is false.
 When content.wrongWay is true, three things change. content.fix says so plainly and kindly instead of anything else: what is wrong with answering this way, that they should not answer like this in a real interview, and what the interviewer wants to hear instead. content.good praises only something that deserves it, such as being honest or answering in English, never the part that goes wrong. And the sample answer shows the right direction as a frame: keep only what is true and helpful in their answer, write every other part as a blank in square brackets, such as "I make sure I am on time by [your plan]", and never repeat the part that goes wrong. Do not fill those blanks from the job posting or with ideas of your own, because you do not know what is true for this learner.
 content.good: one specific thing the learner did well in this answer, naming what they actually said.
 content.fix: the single most useful change to the content of the answer. One thing only. Interviewers in the United States expect people to say what they did themselves and how it ended, and many learners are too modest to do either. So when the question asks about a time something happened and the answer tells a story, check two things before anything else.
@@ -139,15 +139,17 @@ export async function writeFeedback(input: {
   /** What a second listener (Gemini) heard in the recording, when available. */
   listener?: Impression | null
   profile: Profile
+  job?: string
   jobPosting?: string
   resume?: string
 }): Promise<FeedbackResult> {
-  const { question, transcript, language, delivery, listener, profile, jobPosting, resume } = input
+  const { question, transcript, language, delivery, listener, profile, job, jobPosting, resume } = input
   // A resume gives facts, not stories. On a question that asks for a story the model kept writing
   // an event around resume facts however it was told not to, so there the resume is left out and
   // the story has to be the learner's own.
   const asksForStory = /\btell me about a time\b/i.test(question.textEn)
   const parts = [
+    job ? `The job the learner is interviewing for: ${job}.` : "",
     `Interview question (type: ${question.type}): ${question.textEn}`,
     `The learner answered in ${language === "es-US" ? "Spanish, to practise the content first" : "English"}.`,
     `Transcript of the answer:\n${transcript}`,
@@ -207,11 +209,13 @@ export async function askCoach(input: {
   lastAnswer?: string
   lastFeedback?: string
   profile: Profile
+  job?: string
   thread: CoachTurn[]
   text: string
 }): Promise<CoachResult> {
-  const { question, stage, lastAnswer, lastFeedback, profile, thread, text } = input
+  const { question, stage, lastAnswer, lastFeedback, profile, job, thread, text } = input
   const parts = [
+    job ? `The job the learner is interviewing for: ${job}.` : "",
     question ? `The interview question on the learner's screen: ${question.textEn}` : "",
     stage === "question" ? "The learner has not answered it yet." : "The learner has answered it and is reading the feedback.",
     lastAnswer ? `Their answer:\n${lastAnswer}` : "",
@@ -232,7 +236,7 @@ const QuestionSchema = z.object({
 })
 export type QuestionResult = z.infer<typeof QuestionSchema>
 
-const INTERVIEWER_SYSTEM = `You are the interviewer inside an interview-practice app for people who are still learning English and are preparing for interviews for hourly jobs such as home health aide. You play the hiring manager at a home care agency: friendly, professional, and speaking only English, as a real one would. The learner's first language is Spanish. They hear your question read aloud, answer out loud, and then get feedback from a separate coach, so your only job is to decide what to ask next and to ask it well. The practice is useful when it feels like a real interview: an interviewer who listens and asks about what the person just said, and who asks about this job rather than reading from a list.
+const INTERVIEWER_SYSTEM = `You are the interviewer inside an interview-practice app for people who are still learning English and are preparing for interviews for hourly jobs. You play the hiring manager for the job named in the request: friendly, professional, and speaking only English, as a real one would. The learner's first language is Spanish. They hear your question read aloud, answer out loud, and then get feedback from a separate coach, so your only job is to decide what to ask next and to ask it well. The practice is useful when it feels like a real interview: an interviewer who listens and asks about what the person just said, and who asks about this job rather than reading from a list.
 
 What you receive: the interview so far (your questions and transcripts of the learner's spoken answers, which come from speech software and can contain misheard words), whether a follow-up is allowed now, the planned next question from our question bank, and the job posting and the learner's resume if they gave them.
 
@@ -257,11 +261,14 @@ export async function writeQuestion(input: {
   turns: { question: Question; answer?: string }[]
   planned: Question
   allowFollowup: boolean
+  /** The job being interviewed for, such as "sales associate at a retail store". */
+  job: string
   jobPosting?: string
   resume?: string
 }): Promise<QuestionResult> {
-  const { turns, planned, allowFollowup, jobPosting, resume } = input
+  const { turns, planned, allowFollowup, job, jobPosting, resume } = input
   const parts = [
+    `The job you are interviewing for: ${job}.`,
     turns.length
       ? `The interview so far:\n${turns.map((t) => `Interviewer: ${t.question.textEn}\nLearner: ${t.answer ?? "(no answer recorded)"}`).join("\n")}`
       : "The interview has not started: this is the first question.",

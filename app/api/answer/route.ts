@@ -5,6 +5,7 @@ import { FAKE_FEEDBACK, FAKE_TRANSCRIPT, FAKE_WORDS } from "@/lib/fake"
 import { listen, type Impression } from "@/lib/gemini"
 import { rememberTurn } from "@/lib/memory"
 import { asksToRepeat } from "@/lib/rescue"
+import { roleFor } from "@/lib/roles"
 import { findAsked, getSession } from "@/lib/session"
 import { logAnswer } from "@/lib/sessionLog"
 import { isNotSubscribed, transcribe } from "@/lib/transcribe"
@@ -81,7 +82,7 @@ export async function POST(req: Request) {
   let struggled = false
   if (configured.llm()) {
     try {
-      const result = await writeFeedback({ question, transcript, language, delivery, listener, profile: session.profile, jobPosting: session.jobPosting, resume: session.resume })
+      const result = await writeFeedback({ question, transcript, language, delivery, listener, profile: session.profile, job: roleFor(session.role).job, jobPosting: session.jobPosting, resume: session.resume })
       const d = result.delivery
       feedback = {
         content: result.content,

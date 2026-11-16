@@ -6,6 +6,7 @@ import { speak } from "@/lib/polly"
 import { findAsked, getSession } from "@/lib/session"
 import { transcribe } from "@/lib/transcribe"
 import type { CoachResponse, CoachTurn } from "@/lib/types"
+import { roleFor } from "@/lib/roles"
 
 // The Spanish side conversation. Multipart form: sessionId, questionId, stage
 // ("question" or "feedback"), thread (JSON array of the side conversation so
@@ -49,6 +50,7 @@ export async function POST(req: Request) {
         lastAnswer: field("lastAnswer"),
         lastFeedback: field("lastFeedback"),
         profile: session.profile,
+        job: roleFor(session.role).job,
         thread,
         text,
       })

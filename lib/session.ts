@@ -1,6 +1,7 @@
 import { configured } from "./config"
 import { writeQuestion } from "./llm"
-import { pickNextQuestion } from "./questions"
+import { bankFor, pickNextQuestion } from "./questions"
+import { roleFor } from "./roles"
 import type { Profile, Question } from "./types"
 
 // Interview sessions live in server memory: enough for a demo on one machine.
@@ -41,7 +42,7 @@ const WRITE_TIMEOUT_MS = 8000
  * or is slow, the planned question is asked as written.
  */
 export async function nextQuestion(session: Session): Promise<Question> {
-  const planned = pickNextQuestion(session.profile.weakSpots, session.asked.map((q) => q.id))
+  const planned = pickNextQuestion(session.profile.weakSpots, session.asked.map((q) => q.id), bankFor(session.role))
   const last = session.asked.at(-1)
   const allowFollowup = Boolean(last && last.source !== "followup" && session.answers?.[last.id])
   const tailored = Boolean(session.jobPosting || session.resume)
@@ -54,6 +55,7 @@ export async function nextQuestion(session: Session): Promise<Question> {
           turns: session.asked.map((q) => ({ question: q, answer: session.answers?.[q.id] })),
           planned,
           allowFollowup,
+          job: roleFor(session.role).job,
           jobPosting: session.jobPosting,
           resume: session.resume,
         }),

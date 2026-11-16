@@ -5,7 +5,7 @@
 <h3 align="center">Practice the job interview in English. Get help in your language.</h3>
 
 <p align="center">
-  An interview coach for Spanish-speaking workers going for hourly jobs, starting with home health aide.<br>
+  An interview coach for Spanish-speaking workers going for hourly jobs: home health aide, retail and warehouse.<br>
   Built at sunhacks 2026.
 </p>
 
@@ -119,7 +119,7 @@ There is no leaderboard and no grade. Each session is set beside your own earlie
 
 ## Where it stands
 
-- It covers one job so far, home health aide, with ten questions written for it.
+- It covers three jobs so far: home health aide (ten questions), retail store associate and warehouse associate (eight each). Each has its own sample posting, sample resume and demo history.
 - It has not been tested with real learners yet. Jaciel, the learner in the screenshots, is a demo persona. His answers in the feedback screenshots were generated speech sent through the real app.
 - The limits for a late start, pauses and fillers are our own judgment.
 

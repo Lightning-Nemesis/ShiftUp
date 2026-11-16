@@ -1,19 +1,55 @@
 {
-  "note": "Invented demo history, loaded under whatever name is typed on the setup page. {name} is replaced with that name.",
-  "about": "{name} speaks Spanish, works as a home health aide, and is practising for an English interview for a better-paying job at a home care agency.",
-  "profile": {
-    "stories": [
-      "Cared for an elderly client with dementia for three years",
-      "Calmed a client who refused to take her medication by making a schedule with her",
-      "Covered extra weekend shifts when a coworker was sick"
-    ],
-    "weakSpots": [
-      "conflict",
-      "long pauses before starting"
-    ]
+  "note": "Invented demo personas, one per job, loaded under whatever name is typed on the setup page. {name} is replaced with that name.",
+  "roles": {
+    "home_health_aide": {
+      "about": "{name} speaks Spanish, works as a home health aide, and is practising for an English interview for a better-paying job at a home care agency.",
+      "profile": {
+        "stories": [
+          "Cared for an elderly client with dementia for three years",
+          "Calmed a client who refused to take her medication by making a schedule with her",
+          "Covered extra weekend shifts when a coworker was sick"
+        ],
+        "weakSpots": [
+          "conflict",
+          "long pauses before starting"
+        ]
+      },
+      "jobPosting": "Home Health Aide, Desert Bloom Home Care (sample posting). $19.50 an hour. Requirements: one year of caregiving experience; experience with dementia care preferred; able to assist clients with bathing, dressing and mobility; remind clients to take medication; reliable transportation; available some weekends; clear communication with clients, families and nurses.",
+      "resume": "{name}\nPhoenix, Arizona\nLanguages: Spanish (first language), English (conversational)\n\nSUMMARY\nHome caregiver with five years of experience caring for older adults in their homes, including three years of dementia care. Reliable, patient, and calm with clients and their families.\n\nEXPERIENCE\n\nPrivate home caregiver, Phoenix, AZ (2023 to present)\n- Care for an elderly client with dementia: bathing, dressing, meals, and safe transfers from the bed to a chair.\n- Made a daily medication schedule with the client after she refused her medication. She now takes it on time.\n- Tell the client's daughter about changes in mood, appetite, and health every week.\n\nCaregiver, Sunrise Home Care (sample employer), Mesa, AZ (2021 to 2023)\n- Helped four clients a week with personal care, light housekeeping, and meal preparation.\n- Covered extra weekend shifts when coworkers were sick.\n- Arrived on time for every shift for two years.\n\nTRAINING\n- CPR and First Aid certificate (2025)\n- Caregiver training course, 40 hours (2021)\n- English classes at an adult school (2024 to present)\n\nSKILLS\nDementia care, personal care, safe transfers, medication reminders, meal preparation, Spanish and English"
+    },
+    "retail_associate": {
+      "about": "{name} speaks Spanish, works as a cashier at a small grocery store, and is practising for an English interview for a better-paying job at a larger store.",
+      "profile": {
+        "stories": [
+          "Worked the register and restocked shelves at a small grocery store for four years",
+          "Calmed a customer who was angry about a wrong price by checking the shelf label and calling the manager",
+          "Covered extra weekend shifts during the holidays"
+        ],
+        "weakSpots": [
+          "conflict",
+          "long pauses before starting"
+        ]
+      },
+      "jobPosting": "Sales Associate, Saguaro Home and Garden (sample posting). $17.25 an hour. Requirements: friendly customer service; cash register experience preferred; restock shelves and keep the store tidy; able to stand for a full shift and lift up to 40 pounds; available weekends and holidays; clear communication with customers and coworkers; Spanish is a plus.",
+      "resume": "{name}\nPhoenix, Arizona\nLanguages: Spanish (first language), English (conversational)\n\nSUMMARY\nCashier and stocker with four years of experience serving customers in a busy neighborhood grocery store. Friendly, careful with money, and reliable.\n\nEXPERIENCE\n\nCashier and stocker, Mercado La Esperanza (sample employer), Phoenix, AZ (2022 to present)\n- Serve about 150 customers a day at the register, in Spanish and English.\n- Count the cash drawer at the start and end of every shift.\n- Restock shelves and check prices and expiry dates.\n- Trained two new cashiers.\n\nCounter server, Taqueria El Sol (sample employer), Phoenix, AZ (2020 to 2022)\n- Took orders and handled cash and card payments.\n- Covered extra weekend shifts during the holidays.\n\nTRAINING\n- Food handler card (2021)\n- English classes at an adult school (2024 to present)\n\nSKILLS\nCustomer service, cash register, restocking, Spanish and English"
+    },
+    "warehouse_associate": {
+      "about": "{name} speaks Spanish, works at a produce packing house, and is practising for an English interview for a better-paying job at a warehouse.",
+      "profile": {
+        "stories": [
+          "Packed and labelled boxes at a produce packing house for three years",
+          "Noticed boxes with the wrong labels and told the supervisor before the truck left",
+          "Moved pallets with a hand pallet jack"
+        ],
+        "weakSpots": [
+          "conflict",
+          "long pauses before starting"
+        ]
+      },
+      "jobPosting": "Warehouse Associate, Copper State Fulfillment (sample posting). $19.75 an hour. Requirements: lift up to 50 pounds repeatedly; pick, pack and scan orders accurately; meet daily targets; follow all safety rules; pallet jack experience preferred; available for early shifts and overtime in the busy season; enough English to read labels and follow safety instructions.",
+      "resume": "{name}\nPhoenix, Arizona\nLanguages: Spanish (first language), English (conversational)\n\nSUMMARY\nPacker with five years of physical work in a produce packing house and on construction sites. Careful, safe, and used to working to daily targets.\n\nEXPERIENCE\n\nPacker, Valle Verde Produce (sample employer), Phoenix, AZ (2023 to present)\n- Pack and label about 400 boxes per shift.\n- Check labels against the order sheet before boxes are loaded.\n- Move pallets with a hand pallet jack.\n- Noticed a pallet with the wrong labels and told the supervisor before the truck left.\n\nConstruction helper, Sonoran Builders (sample employer), Mesa, AZ (2021 to 2023)\n- Loaded and unloaded materials and kept the site clean and safe.\n- Arrived at 5:30 a.m. for every shift.\n\nTRAINING\n- Workplace safety course, 10 hours (2023)\n- English classes at an adult school (2024 to present)\n\nSKILLS\nPacking and labelling, safe lifting, hand pallet jack, working to targets, Spanish and English"
+    }
   },
-  "jobPosting": "Home Health Aide, Desert Bloom Home Care (sample posting). $19.50 an hour. Requirements: one year of caregiving experience; experience with dementia care preferred; able to assist clients with bathing, dressing and mobility; remind clients to take medication; reliable transportation; available some weekends; clear communication with clients, families and nurses.",
-  "resume": "{name}\nPhoenix, Arizona\nLanguages: Spanish (first language), English (conversational)\n\nSUMMARY\nHome caregiver with five years of experience caring for older adults in their homes, including three years of dementia care. Reliable, patient, and calm with clients and their families.\n\nEXPERIENCE\n\nPrivate home caregiver, Phoenix, AZ (2023 to present)\n- Care for an elderly client with dementia: bathing, dressing, meals, and safe transfers from the bed to a chair.\n- Made a daily medication schedule with the client after she refused her medication. She now takes it on time.\n- Tell the client's daughter about changes in mood, appetite, and health every week.\n\nCaregiver, Sunrise Home Care (sample employer), Mesa, AZ (2021 to 2023)\n- Helped four clients a week with personal care, light housekeeping, and meal preparation.\n- Covered extra weekend shifts when coworkers were sick.\n- Arrived on time for every shift for two years.\n\nTRAINING\n- CPR and First Aid certificate (2025)\n- Caregiver training course, 40 hours (2021)\n- English classes at an adult school (2024 to present)\n\nSKILLS\nDementia care, personal care, safe transfers, medication reminders, meal preparation, Spanish and English",
   "sessions": [
     { "sessionId": "s_2026-11-10_seed01", "date": "2026-11-10", "startDelayMs": 8200, "longPauses": 4, "paceWpm": 96, "weakSpot": "conflict" },
     { "sessionId": "s_2026-11-10_seed01", "date": "2026-11-10", "startDelayMs": 7400, "longPauses": 4, "paceWpm": 101, "weakSpot": null },

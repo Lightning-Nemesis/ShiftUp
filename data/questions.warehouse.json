@@ -1,0 +1,74 @@
+[
+  {
+    "id": "wh_why_01",
+    "type": "why_this_job",
+    "source": "bank",
+    "textEn": "Why do you want to work in our warehouse?",
+    "textEs": "¿Por qué quiere trabajar en nuestro almacén?",
+    "askingEn": "They want a reason that is about the work, such as liking active work or being part of a team, and one thing you know about this company. Saying it is only for the money is not enough.",
+    "askingEs": "Quieren una razón que tenga que ver con el trabajo, como que le guste el trabajo activo o ser parte de un equipo, y algo que usted sepa de esta empresa. Decir que es solo por el dinero no basta."
+  },
+  {
+    "id": "wh_lifting_01",
+    "type": "safety_physical",
+    "source": "bank",
+    "textEn": "This job means lifting boxes of up to 50 pounds many times a day. How do you lift safely?",
+    "textEs": "En este trabajo hay que levantar cajas de hasta 50 libras muchas veces al día. ¿Cómo levanta usted con seguridad?",
+    "askingEn": "They want the steps in order: bend your knees, keep your back straight, hold the box close, and ask for help or use equipment when it is too heavy.",
+    "askingEs": "Quieren los pasos en orden: doblar las rodillas, mantener la espalda recta, sostener la caja cerca del cuerpo y pedir ayuda o usar equipo cuando pesa demasiado."
+  },
+  {
+    "id": "wh_unsafe_01",
+    "type": "safety_physical",
+    "source": "bank",
+    "textEn": "What would you do if you saw a coworker doing something unsafe?",
+    "textEs": "¿Qué haría si viera a un compañero de trabajo haciendo algo peligroso?",
+    "askingEn": "They want to hear that safety comes before speed: you tell the coworker calmly, and you tell the supervisor if it continues or someone could get hurt.",
+    "askingEs": "Quieren oír que la seguridad va antes que la rapidez: usted se lo dice al compañero con calma, y avisa al supervisor si continúa o si alguien puede lastimarse."
+  },
+  {
+    "id": "wh_pace_01",
+    "type": "reliability",
+    "source": "bank",
+    "textEn": "This job has daily targets. Tell me about a time you had to work fast and still be careful.",
+    "textEs": "Este trabajo tiene metas diarias. Cuénteme de una vez que tuvo que trabajar rápido y aun así con cuidado.",
+    "askingEn": "They want one real example: what the task was, how you kept your speed without making mistakes, and how it ended.",
+    "askingEs": "Quieren un ejemplo real: cuál era la tarea, cómo mantuvo la rapidez sin cometer errores y cómo terminó."
+  },
+  {
+    "id": "wh_conflict_01",
+    "type": "conflict",
+    "source": "bank",
+    "textEn": "Tell me about a time you disagreed with a coworker or a supervisor. How did you handle it?",
+    "textEs": "Cuénteme de una vez que no estuvo de acuerdo con un compañero de trabajo o con un supervisor. ¿Cómo lo manejó?",
+    "askingEn": "They are not asking who was right. They want to hear that you listened, stayed respectful and looked for a solution.",
+    "askingEs": "No preguntan quién tenía la razón. Quieren oír que usted escuchó, mantuvo el respeto y buscó una solución."
+  },
+  {
+    "id": "wh_reliability_01",
+    "type": "reliability",
+    "source": "bank",
+    "textEn": "Some of our shifts start at five in the morning. How do you make sure you arrive on time?",
+    "textEs": "Algunos de nuestros turnos empiezan a las cinco de la mañana. ¿Cómo se asegura de llegar a tiempo?",
+    "askingEn": "They want your plan, not a promise: how you get to work, and what you do if the bus or the car fails.",
+    "askingEs": "Quieren su plan, no una promesa: cómo llega al trabajo y qué hace si falla el autobús o el carro."
+  },
+  {
+    "id": "wh_availability_01",
+    "type": "availability",
+    "source": "bank",
+    "textEn": "Can you work nights, weekends or overtime when we are busy?",
+    "textEs": "¿Puede trabajar de noche, los fines de semana o tiempo extra cuando hay mucho trabajo?",
+    "askingEn": "They want a clear, honest answer about nights, weekends and overtime. Say what you can do before what you cannot.",
+    "askingEs": "Quieren una respuesta clara y honesta sobre las noches, los fines de semana y el tiempo extra. Diga primero lo que sí puede hacer."
+  },
+  {
+    "id": "wh_mistake_01",
+    "type": "reliability",
+    "source": "bank",
+    "textEn": "What do you do if you notice you made a mistake, such as packing the wrong item?",
+    "textEs": "¿Qué hace si se da cuenta de que cometió un error, como empacar el artículo equivocado?",
+    "askingEn": "They want honesty: you fix it if you can, you tell your supervisor, and you say what you do so it does not happen again.",
+    "askingEs": "Quieren honestidad: usted lo corrige si puede, avisa a su supervisor y dice qué hace para que no vuelva a pasar."
+  }
+]

@@ -361,7 +361,7 @@ The same model picks the next question (see below). Use low effort for both call
 
 ## Questions
 
-- **Bank:** `data/questions.hha.json`, 8–10 hand-written questions for home health aide, in English and Spanish, reviewed by our Spanish speaker.
+- **Banks:** one per job, hand-written in English and Spanish: `data/questions.hha.json` (home health aide, ten questions), `data/questions.retail.json` and `data/questions.warehouse.json` (eight each). `lib/roles.ts` lists the jobs. The job chosen on the setup page decides which bank is used, and is named to the interviewer, the feedback writer and the coach. Each job also has its own demo persona in `data/seed/demo.json`: a history, a sample posting and a sample resume. The Spanish in the two newer banks has not been reviewed by a Spanish speaker.
 - **What they want to hear:** each bank question also carries `askingEn` and `askingEs`, one hand-written line on what the interviewer is really asking. A "What are they asking?" link under the question opens it. It is fixed text, so it needs no model call and cannot fail in a demo.
 - **From a posting or resume:** when she gives a job posting or a resume, the interviewer (`writeQuestion` in `lib/llm.ts`) words the planned bank question around one requirement or fact from it, such as "This job asks for experience with dementia care. Tell me about a time…". The question keeps the bank question's id and type. Without a posting or resume the bank question is asked as written, with no model call.
 - **Follow-ups:** after each answer the interviewer decides whether to follow up or move on. It follows up when the answer did not address the question, did not say what she did, or did not say how it ended, and it repeats a few of her words ("You said you made a schedule with her. What happened after that?"). Code enforces the limits: never two follow-ups in a row, and none on an answer where the speech software was unsure of more than a third of the words, because the interviewer would be quoting words she may not have said. A follow-up keeps the type of the question it follows and is labelled "Follow-up" on screen. Generated questions come with their own Spanish version and "what they want to hear" line, written by the model and not reviewed by our Spanish speaker.
@@ -392,7 +392,7 @@ lib/gemini.ts              behaviour notes (optional)
 lib/claude.ts              question picking + feedback
 lib/memory.ts              Supermemory + local fallback
 lib/sessionLog.ts          sessions.json
-data/questions.hha.json    question bank
+data/questions.*.json      question bank for each job
 data/visemeMap.json        Polly symbol -> mouth image
 data/seed/maria.json       demo persona
 public/mouths/             mouth images
