@@ -11,6 +11,8 @@
 
 https://github.com/user-attachments/assets/8ca7dcd5-9518-4bda-8cae-a54cbec02daf
 
+https://www.youtube.com/watch?v=RffjRCbW9Ls
+
 <p align="center"><sub>If the video does not play here, open <a href="docs/screenshots/ShiftUp.mp4">docs/screenshots/ShiftUp.mp4</a>.</sub></p>
 
 <p align="center">
